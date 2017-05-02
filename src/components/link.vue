@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import mod from './mod'
+import mod from '@/services/mod'
 export default {
   name: 'link',
   data () {
