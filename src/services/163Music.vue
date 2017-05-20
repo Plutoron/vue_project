@@ -2,14 +2,14 @@
 <div>
    <div @click='showPlayer()'>我的网易云</div>
    <div v-show='show'>
-   	<video controls loop="loop" autoplay name="media" :poster="poster">
-   		<source :src="mp3Url" type="audio/mpeg">
+   	<video controls loop="loop" autoplay name="media" :poster="poster" :src="mp3Url">
+   <!-- 		<source  type="audio/mpeg"> -->
    	</video>
    	<div class="audioPlayer">
    		<div class="container" v-for='song in songs' @click='changeSong(song)'>
    			<div class="info">
    				<span class="songname">{{song.name}}</span>
-      			<span>{{song.artists[0].name}}</span>
+      			<span>{{song.ar[0].name}}</span>
    			</div>
    		</div>
    	</div>
@@ -22,6 +22,7 @@ export default{
    data(){
       return {
          show: false,
+         mp3Id: '',
          mp3Url: '',
          poster: 'http://p1.music.126.net/6y-UleORITEDbvrOLV0Q8A==/5639395138885805.jpg'
       }
@@ -31,8 +32,21 @@ export default{
          this.show = true;
       },
       changeSong:function (curSong) {
-         this.mp3Url = curSong.mp3Url
-         this.poster = curSong.album.picUrl;
+         this.mp3Id = curSong.id;
+         this.poster = curSong.al.picUrl;
+         this.$http.get('https://api.imjad.cn/cloudmusic/',
+     		{
+	     		params:{
+	     			id: this.mp3Id
+	     		}
+			}).then(response => {
+	            const data = JSON.parse(response.bodyText).data;
+	          	this.mp3Url = data[0].url;
+	          	console.log(this.mp3Url)
+		    }, response => {
+		      // error callback
+		    });
+         // console.log(curSong)
          $("video")[0].load();
       }
    },

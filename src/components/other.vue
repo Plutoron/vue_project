@@ -20,14 +20,17 @@ export default {
   	player
   },
   mounted:function () {
-  	this.$http.get('/playlist/detail',
+  	this.$http.get('https://api.imjad.cn/cloudmusic/',
      	{
      		params:{
+          type: 'playlist',
      			id: '507182467'
      		}
 		}).then(response => {
-	          this.songList = JSON.parse(response.bodyText);
-	          this.songs = this.songList.result.tracks;
+            // console.log(response)
+	          this.songList = JSON.parse(response.bodyText).playlist;
+	          this.songs = this.songList.tracks;
+            // console.log(this.songs);
 	    }, response => {
 	      // error callback
 	    });
